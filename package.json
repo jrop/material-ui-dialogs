@@ -6,8 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rm index.js",
-    "build": "babel -o index.js index-source.js ",
-    "watch": "babel -w -o index.js index-source.js "
+    "build": "babel -o index.js index-source.js",
+    "watch": "babel -w -o index.js index-source.js",
+    "prepublish": "babel -o index.js index-source.js"
   },
   "keywords": [],
   "author": "",
