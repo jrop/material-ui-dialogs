@@ -7,9 +7,21 @@ const React = require('react')
 const ReactDOM = require('react-dom')
 
 class PromisifiedDialog extends React.Component {
+	constructor(props) {
+		super(props)
+		this.state = { open: true }
+	}
+
 	cleanup() {
-		ReactDOM.unmountComponentAtNode(this.props.div)
-		document.body.removeChild(this.props.div)
+		this.setState({ open: false })
+
+		// now allow time for closing animation to complete,
+		// and then remove the DOM node
+		const self = this
+		setTimeout(function () {
+			ReactDOM.unmountComponentAtNode(self.props.div)
+			document.body.removeChild(self.props.div)
+		}, 2000)
 	}
 
 	render() {
@@ -19,7 +31,7 @@ class PromisifiedDialog extends React.Component {
 		}))
 
 		return <Dialog
-			open={true}
+			open={this.state.open}
 			actions={actions}
 			title={this.props.options.title}>
 			{React.cloneElement(this.props.content, { ref: 'content' })}
