@@ -1,8 +1,8 @@
 'use strict'
 
-const Dialog = require('material-ui/lib/dialog')
-const FlatButton = require('material-ui/lib/flat-button')
-const TextField = require('material-ui/lib/text-field')
+const Dialog = require('material-ui/Dialog')
+const FlatButton = require('material-ui/FlatButton')
+const TextField = require('material-ui/TextField')
 const React = require('react')
 const ReactDOM = require('react-dom')
 

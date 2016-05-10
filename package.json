@@ -1,6 +1,6 @@
 {
   "name": "material-ui-dialogs",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "Promise-based material-ui alert/confirm/prompt",
   "main": "index.js",
   "scripts": {
@@ -16,7 +16,7 @@
   "author": "Jonathan Apodaca",
   "license": "ISC",
   "peerDependencies": {
-    "material-ui": "^0.14.4",
+    "material-ui": "^0.15.0",
     "react": "^15.0.1",
     "react-dom": "^15.0.1"
   },
