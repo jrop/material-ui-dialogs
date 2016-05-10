@@ -1,11 +1,11 @@
 {
   "name": "material-ui-dialogs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Promise-based material-ui alert/confirm/prompt",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "clean": "rm index.js test/index.js",
+    "clean": "rm -f index.js test/index.js",
     "build": "npm run build-lib && npm run build-test",
     "build-lib": "babel -o index.js index-source.js",
     "build-test": "webpack --entry ./test/index-source.js --output-filename ./test/index.js",

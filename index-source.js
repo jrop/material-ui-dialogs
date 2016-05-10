@@ -1,8 +1,12 @@
 'use strict'
 
-const Dialog = require('material-ui/Dialog')
-const FlatButton = require('material-ui/FlatButton')
-const TextField = require('material-ui/TextField')
+const getMuiTheme = require('material-ui/styles/getMuiTheme').default
+const MuiThemeProvider = require('material-ui/styles/MuiThemeProvider').default
+
+const Dialog = require('material-ui/Dialog').default
+const FlatButton = require('material-ui/FlatButton').default
+const TextField = require('material-ui/TextField').default
+
 const React = require('react')
 const ReactDOM = require('react-dom')
 
@@ -30,12 +34,14 @@ class PromisifiedDialog extends React.Component {
 			onClick: () => action.props.action(self)
 		}))
 
-		return <Dialog
-			open={this.state.open}
-			actions={actions}
-			title={this.props.options.title}>
-			{React.cloneElement(this.props.content, { ref: 'content' })}
-		</Dialog>
+		return <MuiThemeProvider muiTheme={getMuiTheme()}>
+			<Dialog
+				open={this.state.open}
+				actions={actions}
+				title={this.props.options.title}>
+				{React.cloneElement(this.props.content, { ref: 'content' })}
+			</Dialog>
+		</MuiThemeProvider>
 	}
 }
 
