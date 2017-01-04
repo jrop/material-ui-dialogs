@@ -20,6 +20,8 @@ async function main() {
 main()
 ```
 
+To show your own custom component as a dialog, see the example in `test/index-source.js`.
+
 ## License
 
 ISC License (ISC)

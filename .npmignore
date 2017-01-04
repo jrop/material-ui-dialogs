@@ -1,2 +1,7 @@
-test/
+.babelrc
+.eslintrc.json
+.npmignore
 index-source.js
+webpack.config.js
+
+test/

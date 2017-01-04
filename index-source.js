@@ -1,48 +1,18 @@
-'use strict'
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
-const getMuiTheme = require('material-ui/styles/getMuiTheme').default
-const MuiThemeProvider = require('material-ui/styles/MuiThemeProvider').default
+import Dialog from 'material-ui/Dialog'
+import FlatButton from 'material-ui/FlatButton'
+import TextField from 'material-ui/TextField'
 
-const Dialog = require('material-ui/Dialog').default
-const FlatButton = require('material-ui/FlatButton').default
-const TextField = require('material-ui/TextField').default
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-const React = require('react')
-const ReactDOM = require('react-dom')
-
-class PromisifiedDialog extends React.Component {
-	constructor(props) {
-		super(props)
-		this.state = { open: true }
-	}
-
-	cleanup() {
-		this.setState({ open: false })
-
-		// now allow time for closing animation to complete,
-		// and then remove the DOM node
-		const self = this
-		setTimeout(function () {
-			ReactDOM.unmountComponentAtNode(self.props.div)
-			document.body.removeChild(self.props.div)
-		}, 2000)
-	}
-
-	render() {
-		const self = this
-		const actions = this.props.options.actions.map(action => React.cloneElement(action, {
-			onClick: () => action.props.action(self)
-		}))
-
-		return <MuiThemeProvider muiTheme={getMuiTheme()}>
-			<Dialog
-				open={this.state.open}
-				actions={actions}
-				title={this.props.options.title}>
-				{React.cloneElement(this.props.content, { ref: 'content' })}
-			</Dialog>
-		</MuiThemeProvider>
-	}
+// Utility functions {{
+function arrify(el) {
+	if (typeof el == 'undefined')
+		return []
+	return Array.isArray(el) ? el : [el]
 }
 
 function defer() {
@@ -50,15 +20,70 @@ function defer() {
 	d.promise = new Promise((y, n) => (d.resolve = y, d.reject = n))
 	return d
 }
+// }}
 
-function makeDialogAndWait(options, content) {
-	const deferred = defer()
+// Helper React Components {{
+class DialogContent extends React.Component {
+	render() {
+		return <div>{this.props.children}</div>
+	}
+}
+
+class DialogActions extends React.Component {
+	getActions() {
+		return this.props.children
+	}
+
+	render() {
+		return <div>{this.props.children}</div>
+	}
+}
+
+class DialogWrapper extends React.Component {
+	constructor(props) {
+		super(props)
+		this.state = {open: true}
+	}
+
+	close() {
+		this.setState({open: false})
+	}
+
+	render() {
+		const [content] = arrify(this.props.children).filter(c => c.type == DialogContent)
+		const [actions] = arrify(this.props.children).filter(c => c.type == DialogActions)
+
+		return <MuiThemeProvider muiTheme={getMuiTheme()}>
+			<Dialog
+				open={this.state.open}
+				actions={arrify(actions.props.children)}
+				title={this.props.title}>
+				{React.cloneElement(content, {ref: 'content'})}
+			</Dialog>
+		</MuiThemeProvider>
+	}
+}
+// }}
+
+function show(dialog) {
 	const div = document.createElement('div')
 	document.body.appendChild(div)
+	function cleanup() {
+		ReactDOM.unmountComponentAtNode(div)
+		document.body.removeChild(div)
+	}
 
-	ReactDOM.render(<PromisifiedDialog div={div} deferred={deferred} content={content} options={options} />, div)
+	const dlg = ReactDOM.render(dialog, div)
 
-	return deferred.promise
+	return dlg.promise
+		.then(result => {
+			setTimeout(() => cleanup(), 2000)
+			return result
+		})
+		.catch(e => {
+			setTimeout(() => cleanup(), 2000)
+			throw e
+		})
 }
 
 function alert(title, message) {
@@ -67,17 +92,29 @@ function alert(title, message) {
 		title = 'Alert'
 	}
 
-	return makeDialogAndWait({
-		title,
-		actions: [
-			<FlatButton
-				label="Okay"
-				action={dlg => {
-					dlg.props.deferred.resolve()
-					dlg.cleanup()
-				}} />
-		],
-	}, <div>{message}</div>)
+	class DialogContainer extends React.Component {
+		constructor() {
+			super()
+			this.deferred = defer()
+			this.promise = this.deferred.promise
+		}
+		render() {
+			return <DialogWrapper title={title} ref="dlg">
+				<DialogContent>
+					<div>{message}</div>
+				</DialogContent>
+				<DialogActions>
+					<FlatButton
+						label="Okay"
+						onClick={() => {
+							this.deferred.resolve()
+							this.refs.dlg.close()
+						}} />
+				</DialogActions>
+			</DialogWrapper>
+		}
+	}
+	return show(<DialogContainer />)
 }
 
 function confirm(title, message) {
@@ -86,41 +123,37 @@ function confirm(title, message) {
 		title = 'Confirm'
 	}
 
-	return makeDialogAndWait({
-		title,
-		actions: [
-			<FlatButton
-				label="No"
-				secondary={true}
-				action={dlg => {
-					dlg.props.deferred.resolve(false)
-					dlg.cleanup()
-				}} />,
-			<FlatButton
-				label="Yes"
-				primary={true}
-				action={dlg => {
-					dlg.props.deferred.resolve(true)
-					dlg.cleanup()
-				}} />
-		],
-	}, <div>{message}</div>)
-}
-
-class PromptComponent extends React.Component {
-	getValue() {
-		return this.refs.text.getValue()
+	class DialogContainer extends React.Component {
+		constructor() {
+			super()
+			this.deferred = defer()
+			this.promise = this.deferred.promise
+		}
+		render() {
+			return <DialogWrapper title={title} ref="dlg">
+				<DialogContent>
+					<div>{message}</div>
+				</DialogContent>
+				<DialogActions>
+					<FlatButton
+						label="No"
+						secondary={true}
+						onClick={() => {
+							this.deferred.resolve(false)
+							this.refs.dlg.close()
+						}} />
+					<FlatButton
+						label="Yes"
+						primary={true}
+						onClick={() => {
+							this.deferred.resolve(true)
+							this.refs.dlg.close()
+						}} />
+				</DialogActions>
+			</DialogWrapper>
+		}
 	}
-
-	render() {
-		return <div>
-			<div>{this.props.message}</div>
-			<div><TextField
-				style={{ width: '100%' }}
-				defaultValue={this.props.defaultValue}
-				ref="text" /></div>
-		</div>
-	}
+	return show(<DialogContainer />)
 }
 
 function prompt(title, message, defaultValue) {
@@ -130,27 +163,52 @@ function prompt(title, message, defaultValue) {
 	}
 	defaultValue = defaultValue || ''
 
-	return makeDialogAndWait({
-		title,
-		actions: [
-			<FlatButton
-				label="Cancel"
-				secondary={true}
-				action={dlg => {
-					dlg.props.deferred.resolve(null)
-					dlg.cleanup()
-				}} />,
-			<FlatButton
-				label="Okay"
-				primary={true}
-				action={dlg => {
-					dlg.props.deferred.resolve(dlg.refs.content.getValue())
-					dlg.cleanup()
-				}} />
-		],
-	}, <PromptComponent message={message} defaultValue={defaultValue} />)
+	class DialogContainer extends React.Component {
+		constructor() {
+			super()
+			this.deferred = defer()
+			this.promise = this.deferred.promise
+		}
+		render() {
+			return <DialogWrapper title={title} ref="dlg">
+				<DialogContent>
+					<div>
+						<div>{this.props.message}</div>
+						<div><TextField
+							style={{width: '100%'}}
+							defaultValue={defaultValue}
+							ref="text" /></div>
+					</div>
+				</DialogContent>
+				<DialogActions>
+					<FlatButton
+						label="Cancel"
+						secondary={true}
+						onClick={() => {
+							this.deferred.resolve(null)
+							this.refs.dlg.close()
+						}} />
+					<FlatButton
+						label="Okay"
+						primary={true}
+						onClick={() => {
+							this.deferred.resolve(this.refs.text.getValue())
+							this.refs.dlg.close()
+						}} />
+				</DialogActions>
+			</DialogWrapper>
+		}
+	}
+	return show(<DialogContainer />)
 }
 
-module.exports = {
-	alert, confirm, prompt
+export {
+	alert,
+	confirm,
+	prompt,
+	defer,
+	show,
+	DialogWrapper as Dialog,
+	DialogContent as Content,
+	DialogActions as Actions,
 }
