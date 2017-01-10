@@ -35,9 +35,44 @@ window.showCustom = function () {
 		}
 
 		render() {
-			return <Dialog ref="dlg">
+			return <Dialog ref="dlg" title="Scrolling..." autoScrollBodyContent={true}>
 				<Content>
-					Hello
+					<p>The</p>
+					<p>quick</p>
+					<p>brown</p>
+					<p>fox</p>
+					<p>jumps</p>
+					<p>over</p>
+					<p>the</p>
+					<p>lazy</p>
+					<p>dog</p>
+					<p>The</p>
+					<p>quick</p>
+					<p>brown</p>
+					<p>fox</p>
+					<p>jumps</p>
+					<p>over</p>
+					<p>the</p>
+					<p>lazy</p>
+					<p>dog</p>
+					<p>The</p>
+					<p>quick</p>
+					<p>brown</p>
+					<p>fox</p>
+					<p>jumps</p>
+					<p>over</p>
+					<p>the</p>
+					<p>lazy</p>
+					<p>dog</p>
+					<p>The</p>
+					<p>quick</p>
+					<p>brown</p>
+					<p>fox</p>
+					<p>jumps</p>
+					<p>over</p>
+					<p>the</p>
+					<p>lazy</p>
+					<p>dog</p>
 				</Content>
 				<Actions>
 					<FlatButton label="Okay" onClick={() => this.onClose()} />

@@ -1,6 +1,6 @@
 {
   "name": "material-ui-dialogs",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Promise-based material-ui alert/confirm/prompt",
   "main": "index.js",
   "scripts": {

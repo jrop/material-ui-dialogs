@@ -55,9 +55,9 @@ class DialogWrapper extends React.Component {
 
 		return <MuiThemeProvider muiTheme={getMuiTheme()}>
 			<Dialog
+				{...this.props}
 				open={this.state.open}
-				actions={arrify(actions.props.children)}
-				title={this.props.title}>
+				actions={arrify(actions.props.children)}>
 				{React.cloneElement(content, {ref: 'content'})}
 			</Dialog>
 		</MuiThemeProvider>
