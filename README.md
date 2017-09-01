@@ -1,5 +1,7 @@
 # material-ui-dialogs
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/jrop/material-ui-dialogs.svg)](https://greenkeeper.io/)
+
 ## Installation
 
 ```sh
