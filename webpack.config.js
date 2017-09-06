@@ -1,16 +1,20 @@
-'use strict'
-
-module.exports = {
-	devtool: '#source-maps',
-	entry: './test/index-source.js',
-	output: {
-		filename: './test/index.js',
-	},
-	module: {
-		loaders: [{
-			test: /\.js$/,
-			exclude: /node_modules/,
-			loader: 'babel-loader',
-		}],
-	},
+const builder = require('webpack-configify').default
+const PROD = process.env.NODE_ENV == 'production'
+const conf = builder()
+	.production(PROD)
+	.development(!PROD)
+	.loader('.js', 'babel-loader')
+	.merge({
+		entry: './src/index.js',
+		output: {
+			library: 'MuiDialogs',
+			libraryTarget: 'umd',
+			filename: './dist/material-ui-dialogs.js',
+		},
+	})
+	.build()
+module.exports = conf
+if (require.main === module) {
+	const {inspect} = require('util')
+	console.log(inspect(conf, null, null))
 }

@@ -1,9 +1,27 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Material UI Dialogs</title>
-  <script src="index.js"></script>
+  <script src="./dist/material-ui-dialogs.js"></script>
+  <script>
+    window.showAlert = function (title, message) {
+      MuiDialogs.alert(title, message)
+        .then(() => alert('Alert has been dismissed'))
+    }
+
+    window.showConfirm = function (title, message) {
+      MuiDialogs.confirm(title, message)
+        .then(result => alert(`You elected to ${result ? 'proceed' : 'cancel'}.`))
+    }
+
+    window.showPrompt = function (title, message, defaultValue) {
+      MuiDialogs.prompt(title, message, defaultValue)
+        .then(alert)
+    }
+  </script>
 </head>
+
 <body>
   <h1>Demo</h1>
 
@@ -22,10 +40,6 @@
   <ul>
     <li><a href="javascript: showPrompt('Please provide input', 'What would you like me to say?', '(type here)')">Show prompt</a></li>
   </ul>
-
-  <h2>Custom</h2>
-  <ul>
-    <li><a href="javascript: showCustom()">Show custom</a></li>
-  </ul>
 </body>
+
 </html>
