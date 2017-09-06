@@ -6,11 +6,9 @@
 npm install material-ui-dialogs
 ```
 
-## Use
+## Use (CommonJS)
 
 ```js
-'use strict'
-
 const muiDialogs = require('material-ui-dialogs')
 async function main() {
 	await muiDialogs.alert('My title', 'My message')
@@ -20,12 +18,24 @@ async function main() {
 main()
 ```
 
-To show your own custom component as a dialog, see the example in `test/index-source.js`.
+## Use (UMD)
+
+```html
+<script src="https://unpkg.com/material-ui-dialogs/dist/material-ui-dialogs.js"></script>
+<script>
+async function main() {
+	await MuiDialogs.alert('My title', 'My message')
+	const shouldContinue = await MuiDialogs.confirm('Confirm Title', 'Should I continue?')
+	const name = await MuiDialogs.prompt('Prompt Title', 'What is your name?', 'Default value here')
+}
+main()
+</script>
+```
 
 ## License
 
 ISC License (ISC)
-Copyright (c) 2016, Jonathan Apodaca <jrapodaca@gmail.com>
+Copyright (c) 2017, Jonathan Apodaca <jrapodaca@gmail.com>
 
 Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.
 
