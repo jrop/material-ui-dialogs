@@ -11,6 +11,12 @@ const conf = builder()
 			libraryTarget: 'umd',
 			filename: './dist/material-ui-dialogs.js',
 		},
+		resolve: {
+			alias: {
+				'react': 'preact-compat',
+				'react-dom': 'preact-compat',
+			},
+		},
 	})
 	.build()
 module.exports = conf

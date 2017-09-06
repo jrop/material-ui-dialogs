@@ -1,52 +1,53 @@
 {
-  "name": "material-ui-dialogs",
-  "version": "1.2.0",
-  "description": "Promise-based material-ui alert/confirm/prompt",
-  "main": "lib/index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "clean": "rm -f index.js test/index.js",
-    "build": "babel -d lib/ src/ && NODE_ENV=production webpack",
-    "prepublish": "npm run build"
-  },
-  "keywords": [
-    "material",
-    "ui",
-    "material-ui",
-    "dialog",
-    "dialogs",
-    "promise",
-    "alert",
-    "confirm",
-    "prompt"
-  ],
-  "author": "Jonathan Apodaca",
-  "license": "ISC",
-  "peerDependencies": {
-    "material-ui": "^0.19.1",
-    "react": "^15.0.1",
-    "react-dom": "^15.0.1"
-  },
-  "devDependencies": {
-    "arrify": "^1.0.1",
-    "babel-cli": "^6.26.0",
-    "babel-eslint": "^7.1.1",
-    "babel-loader": "^7.1.2",
-    "babel-polyfill": "^6.20.0",
-    "babel-preset-env": "^1.6.0",
-    "babel-preset-latest": "^6.16.0",
-    "babel-preset-react": "^6.24.1",
-    "eslint": "^4.6.1",
-    "eslint-plugin-react": "^7.3.0",
-    "material-ui": "^0.16.6",
-    "react": "^15.4.1",
-    "react-dom": "^15.4.1",
-    "webpack": "^3.5.6",
-    "webpack-configify": "0.0.5"
-  },
-  "repository": "jrop/material-ui-dialogs",
-  "files": [
-    "dist/**/*",
-    "lib/**/*"
-  ]
+	"name": "material-ui-dialogs",
+	"version": "1.2.0",
+	"description": "Promise-based material-ui alert/confirm/prompt",
+	"main": "lib/index.js",
+	"scripts": {
+		"_prettier": "prettier --use-tabs --no-semi --single-quote --trailing-comma es5 --no-bracket-spacing --jsx-bracket-same-line 'src/**/*.js'",
+		"lint": "npm run _prettier -- -l",
+		"lint:fix": "npm run _prettier -- --write",
+		"clean": "rm -f index.js test/index.js",
+		"build": "babel -d lib/ src/ && NODE_ENV=production webpack",
+		"precommit": "npm run lint",
+		"prepublish": "npm run build"
+	},
+	"keywords": [
+		"material",
+		"ui",
+		"material-ui",
+		"dialog",
+		"dialogs",
+		"promise",
+		"alert",
+		"confirm",
+		"prompt"
+	],
+	"author": "Jonathan Apodaca",
+	"license": "ISC",
+	"peerDependencies": {
+		"material-ui": "^0.19.1",
+		"react": "^15.0.1",
+		"react-dom": "^15.0.1"
+	},
+	"devDependencies": {
+		"arrify": "^1.0.1",
+		"babel-cli": "^6.26.0",
+		"babel-loader": "^7.1.2",
+		"babel-polyfill": "^6.20.0",
+		"babel-preset-env": "^1.6.0",
+		"babel-preset-react": "^6.24.1",
+		"husky": "^0.14.3",
+		"material-ui": "^0.16.6",
+		"preact": "^8.2.5",
+		"preact-compat": "^3.17.0",
+		"prettier": "^1.6.1",
+		"webpack": "^3.5.6",
+		"webpack-configify": "0.0.5"
+	},
+	"repository": "jrop/material-ui-dialogs",
+	"files": [
+		"dist/**/*",
+		"lib/**/*"
+	]
 }

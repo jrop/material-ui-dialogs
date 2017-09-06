@@ -10,14 +10,13 @@ import ReactDOM from 'react-dom'
 
 // Utility functions {{
 function arrify(el) {
-	if (typeof el == 'undefined')
-		return []
+	if (typeof el == 'undefined') return []
 	return Array.isArray(el) ? el : [el]
 }
 
 function defer() {
-	const d = { }
-	d.promise = new Promise((y, n) => (d.resolve = y, d.reject = n))
+	const d = {}
+	d.promise = new Promise((y, n) => ((d.resolve = y), (d.reject = n)))
 	return d
 }
 // }}
@@ -50,17 +49,23 @@ class DialogWrapper extends React.Component {
 	}
 
 	render() {
-		const [content] = arrify(this.props.children).filter(c => c.type == DialogContent)
-		const [actions] = arrify(this.props.children).filter(c => c.type == DialogActions)
+		const [content] = arrify(this.props.children).filter(
+			c => c.type == DialogContent
+		)
+		const [actions] = arrify(this.props.children).filter(
+			c => c.type == DialogActions
+		)
 
-		return <MuiThemeProvider muiTheme={getMuiTheme()}>
-			<Dialog
-				{...this.props}
-				open={this.state.open}
-				actions={arrify(actions.props.children)}>
-				{React.cloneElement(content, {ref: 'content'})}
-			</Dialog>
-		</MuiThemeProvider>
+		return (
+			<MuiThemeProvider muiTheme={getMuiTheme()}>
+				<Dialog
+					{...this.props}
+					open={this.state.open}
+					actions={arrify(actions.props.children)}>
+					{React.cloneElement(content, {ref: 'content'})}
+				</Dialog>
+			</MuiThemeProvider>
+		)
 	}
 }
 // }}
@@ -99,19 +104,22 @@ function alert(title, message) {
 			this.promise = this.deferred.promise
 		}
 		render() {
-			return <DialogWrapper title={title} ref="dlg">
-				<DialogContent>
-					<div>{message}</div>
-				</DialogContent>
-				<DialogActions>
-					<FlatButton
-						label="Okay"
-						onClick={() => {
-							this.deferred.resolve()
-							this.refs.dlg.close()
-						}} />
-				</DialogActions>
-			</DialogWrapper>
+			return (
+				<DialogWrapper title={title} ref="dlg">
+					<DialogContent>
+						<div>{message}</div>
+					</DialogContent>
+					<DialogActions>
+						<FlatButton
+							label="Okay"
+							onClick={() => {
+								this.deferred.resolve()
+								this.refs.dlg.close()
+							}}
+						/>
+					</DialogActions>
+				</DialogWrapper>
+			)
 		}
 	}
 	return show(<DialogContainer />)
@@ -130,27 +138,31 @@ function confirm(title, message) {
 			this.promise = this.deferred.promise
 		}
 		render() {
-			return <DialogWrapper title={title} ref="dlg">
-				<DialogContent>
-					<div>{message}</div>
-				</DialogContent>
-				<DialogActions>
-					<FlatButton
-						label="No"
-						secondary={true}
-						onClick={() => {
-							this.deferred.resolve(false)
-							this.refs.dlg.close()
-						}} />
-					<FlatButton
-						label="Yes"
-						primary={true}
-						onClick={() => {
-							this.deferred.resolve(true)
-							this.refs.dlg.close()
-						}} />
-				</DialogActions>
-			</DialogWrapper>
+			return (
+				<DialogWrapper title={title} ref="dlg">
+					<DialogContent>
+						<div>{message}</div>
+					</DialogContent>
+					<DialogActions>
+						<FlatButton
+							label="No"
+							secondary={true}
+							onClick={() => {
+								this.deferred.resolve(false)
+								this.refs.dlg.close()
+							}}
+						/>
+						<FlatButton
+							label="Yes"
+							primary={true}
+							onClick={() => {
+								this.deferred.resolve(true)
+								this.refs.dlg.close()
+							}}
+						/>
+					</DialogActions>
+				</DialogWrapper>
+			)
 		}
 	}
 	return show(<DialogContainer />)
@@ -166,37 +178,46 @@ function prompt(title, message, defaultValue) {
 	class DialogContainer extends React.Component {
 		constructor() {
 			super()
+			this.state = {text: '(type here)'}
 			this.deferred = defer()
 			this.promise = this.deferred.promise
 		}
 		render() {
-			return <DialogWrapper title={title} ref="dlg">
-				<DialogContent>
-					<div>
-						<div>{this.props.message}</div>
-						<div><TextField
-							style={{width: '100%'}}
-							defaultValue={defaultValue}
-							ref="text" /></div>
-					</div>
-				</DialogContent>
-				<DialogActions>
-					<FlatButton
-						label="Cancel"
-						secondary={true}
-						onClick={() => {
-							this.deferred.resolve(null)
-							this.refs.dlg.close()
-						}} />
-					<FlatButton
-						label="Okay"
-						primary={true}
-						onClick={() => {
-							this.deferred.resolve(this.refs.text.getValue())
-							this.refs.dlg.close()
-						}} />
-				</DialogActions>
-			</DialogWrapper>
+			return (
+				<DialogWrapper title={title} ref="dlg">
+					<DialogContent>
+						<div>
+							<div>{this.props.message}</div>
+							<div>
+								<TextField
+									style={{width: '100%'}}
+									value={this.state.text}
+									name="prompt"
+									onChange={(e, text) => this.setState({text})}
+								/>
+							</div>
+						</div>
+					</DialogContent>
+					<DialogActions>
+						<FlatButton
+							label="Cancel"
+							secondary={true}
+							onClick={() => {
+								this.deferred.resolve(null)
+								this.refs.dlg.close()
+							}}
+						/>
+						<FlatButton
+							label="Okay"
+							primary={true}
+							onClick={() => {
+								this.deferred.resolve(this.state.text)
+								this.refs.dlg.close()
+							}}
+						/>
+					</DialogActions>
+				</DialogWrapper>
+			)
 		}
 	}
 	return show(<DialogContainer />)
