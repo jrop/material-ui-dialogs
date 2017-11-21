@@ -178,7 +178,7 @@ function prompt(title, message, defaultValue) {
 	class DialogContainer extends React.Component {
 		constructor() {
 			super()
-			this.state = {text: '(type here)'}
+			this.state = {text: defaultValue }
 			this.deferred = defer()
 			this.promise = this.deferred.promise
 		}
